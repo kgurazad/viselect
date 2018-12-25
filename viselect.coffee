@@ -1,4 +1,4 @@
-class ViSelect
+class window.ViSelect
 
   constructor: (name, values) ->
     @name = name
@@ -6,6 +6,18 @@ class ViSelect
     @setFocusListeners()
     @setClickListeners()
     @setKeyListeners()
+    $('#under-' + @name).hide()
+    num = 0
+    for i of @values
+      word = @values[i]
+      num++
+      if num == 1
+        $('#under-' + @name).append '<li class="under-' + @name + '-item list-group-item active">' + word + '</li>'
+      else
+        $('#under-' + @name).append '<li class="under-' + @name + '-item list-group-item">' + word + '</li>'
+      if num == 6
+        break
+      #
     return
 
   setFocusListeners: () ->
@@ -16,7 +28,9 @@ class ViSelect
       return
     $('#' + @name).on 'focusout', ->
       if $('#around-' + @name).find(':hover').length == 0
-        # $('#under-' + @name).hide()
+        if $(this).val().slice(-1) == ','
+          $(this).val $(this).val().slice 0, -1
+        $('#under-' + @name).hide()
         return
       return
     return
@@ -79,7 +93,7 @@ class ViSelect
       val = $(this).val().toLowerCase().trim().split(/,\s*/).slice(-1)[0]
       num = 0
       for i of @values
-        word = words[i]
+        word = @values[i]
         if word.toLowerCase().startsWith(val)
           num++
           if num == 1
